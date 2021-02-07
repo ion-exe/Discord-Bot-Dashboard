@@ -1,0 +1,27 @@
+{
+  "name": "Discord-Bot-Dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "discord-bot-dashboard": "^0.2.0",
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "ejs-lint": "^1.1.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "form-data": "^3.0.0",
+    "node-fetch": "^2.6.1",
+    "parse-ms": "^2.1.0",
+    "passport": "^0.4.1",
+    "passport-discord": "^0.1.4",
+    "quick.db": "^7.1.3"
+  }
+}

@@ -1,0 +1,11 @@
+<link rel="stylesheet" type="text/css" href="/stylesheet.css">
+<body>
+<%- include('partials/nav.ejs') %>
+<center><h1><%= guild.name %></h1>
+
+<%= for (g of guild.channels) { %>
+  g.name
+<% } %>
+</center>
+
+</form>

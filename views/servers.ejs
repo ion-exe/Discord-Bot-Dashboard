@@ -1,0 +1,14 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title><%- pageTitle %></title>
+
+<link rel="stylesheet" type="text/css" href="/stylesheet.css">
+
+<%- include('./partials/nav.ejs') %>
+<% for ( g of servers) {%>
+            <img src="<%='https://cdn.discordapp.com/icons/'+g.id+'/'+g.icon+'.png' %>"><p class="header"><%= g.name %>
+              <button class="ui inverted grey button" style="background-color:purple;border-radius: 5px">
+              <a href = "/manage/<%-g.id%>"><i class="cog icon"></i> Manage</a></button></p>
+      <% } %>
+      
