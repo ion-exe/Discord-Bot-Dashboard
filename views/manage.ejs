@@ -39,3 +39,9 @@
 </style>
 <input class="setprefixtext" name="prefix" id="prefix">&nbsp;&nbsp;<input class="button" type="Submit"></form>
 <%- done ? '<font color="green">Done!</font>' : '' %><br><br>
+<% if (regged && regged.length) { %>
+<% for (v of regged) { %>
+
+<form action="/send/<%= v %>" method="POST"><font color="grey"><i>#<%= bot.channels.cache.get(v).name %></i></font><input name="msg-<%= v %>"><input type="Submit"></form><br>
+<% } %>
+<% } %>

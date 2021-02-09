@@ -1,7 +1,7 @@
 module.exports = {
-  clientId: "",
-  clientSecret: "",
-  redirectUri: "localhost:3000/callback",
+  clientId: '',
+  clientSecret: '',
+  redirectUri: '',
   port: 3000,
-  scopes: ['guilds', 'guilds.join', 'identify', 'email']
+  scopes: ['identify', 'guilds', 'guilds.join', 'email']
 }

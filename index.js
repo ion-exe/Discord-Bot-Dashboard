@@ -72,7 +72,7 @@ app.get('/manage/:id', function(req, res) {
   })
   if (!guild) return res.redirect('/') ;
   let channels = guild.channels.cache;
-  res.render('manage.ejs', {guild: guild, user: req.session.user, pageTitle: 'Manage Server', done: false, channels: channels})
+  res.render('manage.ejs', {guild: guild, user: req.session.user, pageTitle: 'Manage Server', done: false, channels: channels, regged: [db.get(`c_${guild.id}`)] || [], bot: client})
 });
 app.post('/prefix/:id', (req, res) => {
   if (!req.session.user) return console.log('wait what');
@@ -81,6 +81,15 @@ app.post('/prefix/:id', (req, res) => {
   let guild = client.guilds.cache.get(id);
   let pref = req.body.prefix || (db.get(`prefix_${id}`) || '!');
   db.set(`prefix_${id}`, pref); 
-  res.render('manage.ejs', {guild: client.guilds.cache.get(id), user: req.session.user, pageTitle: 'Manage Server', done: true, channels: guild.channels.cache})
+  res.render('manage.ejs', {guild: client.guilds.cache.get(id), user: req.session.user, pageTitle: 'Manage Server', done: true, channels: guild.channels.cache, regged: db.get(`c_${guild.id}`) || [], bot: client})
+});
+
+app.post('/send/:id', (req, res) => {
+  let id = req.params['id'];
+  console.log(id)
+  console.log(Object.keys(client.channels.fetch("id")))
+  client.channels.fetch(id, true).then(channel => {console.log(Object.keys(channel));channel.send(req.body['msg-'+channel.id])}).catch(console.error)
+  res.render('manage.ejs', {guild: client.guilds.cache.get(id), user: req.session.user, pageTitle: 'Manage Server', done: true, channels: guild.channels.cache, regged: db.get(`c_${guild.id}`) || [], bot: client})
+  
 })
 app.listen(port, () => console.info(`Listening on port ${port}`));
