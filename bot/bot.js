@@ -2,8 +2,9 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const FS = require('fs');
 const db = require('quick.db');
+
 client.commands = new Discord.Collection();
-FS.readdir("./commands/", (e, files) => {
+FS.readdir("./bot/commands/", (e, files) => {
 
   if(e) console.log(JSON.stringify(e));
   let file = files.filter(f => f.split(".").pop() === "js");
@@ -20,8 +21,9 @@ client.on('message', function(message) {
     if(message.channel.type === "dm") return;
     let prefix = '!'
     let rprefix = db.get(`prefix_${message.guild.id}`);
+    console.log(rprefix);
     if (rprefix) prefix = rprefix;
-    if (!rprefix) db.set(`prefix_${message.guild.id}`, prefix);
+    if (!message.content.startsWith(prefix)) return;
     let messageArray = message.content.split(" ");
     let args = message.content.slice(prefix.length).trim().split(/ +/g);
     let cmd = args.shift().toLowerCase();
@@ -35,9 +37,8 @@ client.on('message', function(message) {
         console.log(JSON.stringify(e))
       }
     }
-})
-
+});
   
 
-client.login("ODA3MjU4ODMzMzI3NDg5MDY0.YB1YYA.jYRTyEqjoSqnDWnBF11l8FOi23c")
-exports.client = client
+client.login("bot token")
+exports.client = client;

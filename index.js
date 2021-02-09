@@ -1,10 +1,10 @@
 const client = require('./bot/bot.js').client
-
 const express = require('express');
 var bodyParser = require('body-parser');
 const app = express();
 const db = require('quick.db');
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 let port = require('./config.js').port || 3000;
 app.set('port', port);
 const session = require('express-session');
@@ -49,8 +49,9 @@ app.get('/authorize', passport.authenticate('discord', { scope: scopes, prompt: 
 app.get('/callback', passport.authenticate('discord', { failureRedirect: '/' }), function(req, res) { req.session.user = req.user; req.session.user.tag = req.user.username + '#' + req.user.discriminator; res.redirect('/') })
 
 
-app.get('/logout', (req, res) => {
+app.get('/authorize/logout', (req, res) => {
     req.session.destroy();
+    res.redirect('/');
 });
 app.get('/servers', function(req, res) {
   if (!req.session.user) return res.redirect('/authorize');
@@ -65,30 +66,21 @@ app.get('/servers', function(req, res) {
 app.get('/manage/:id', function(req, res) {
   if (!req.session.user) return res.redirect('/authorize');
   let id = req.params['id'];
-  let g = null;
+  let guild = null;
   req.session.user.guilds.forEach(function (x) {
-    if (id === x.id) g = x;
+    if (id === x.id) guild = client.guilds.cache.get(x.id);
   })
-  if (!g) return res.redirect('/') ;
-  
-  res.render('manage.ejs', {guild: g, user: req.session.user, pageTitle: 'Manage Server'})
+  if (!guild) return res.redirect('/') ;
+  let channels = guild.channels.cache;
+  res.render('manage.ejs', {guild: guild, user: req.session.user, pageTitle: 'Manage Server', done: false, channels: channels})
 });
-app.post('/manage/:id', (req, res) => {
+app.post('/prefix/:id', (req, res) => {
+  if (!req.session.user) return console.log('wait what');
   let id = req.params['id'];
-  let rolesName = req.body.role;
-  let roleColor = req.body.roleColor.toUpperCase;
-  let user = req.session.user;
-  client.guilds.cache.get(id).roles.cache.create({
-    data: {
-      name: rolesName,
-      color: roleColor
-    },
-    reason: 'Generated from dashboard'
-  })
-});
-app.post('/send/:id', (req, res) => {
-  if (!req.session.user) return res.send('get outta here you bot');
-  let id = req.params['id'];
-  client.channels.cache.get(id).send((req.body.message || 'hi'))
+  if (!client.guilds.cache.get(id)) return res.send('oh weird');
+  let guild = client.guilds.cache.get(id);
+  let pref = req.body.prefix || (db.get(`prefix_${id}`) || '!');
+  db.set(`prefix_${id}`, pref); 
+  res.render('manage.ejs', {guild: client.guilds.cache.get(id), user: req.session.user, pageTitle: 'Manage Server', done: true, channels: guild.channels.cache})
 })
 app.listen(port, () => console.info(`Listening on port ${port}`));

@@ -3,9 +3,39 @@
 <%- include('partials/nav.ejs') %>
 <center><h1><%= guild.name %></h1>
 
-<%= for (g of guild.channels) { %>
-  g.name
-<% } %>
-</center>
+<form style="background: dark grey" action="/prefix/<%= guild.id %>" method="POST">
+<h3>Set a prefix</h3>
+<style>
+.button {
+  padding: 6px 10px;
+  font-size: 12px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 9px;
+}
 
-</form>
+.button:hover {background-color: #3e8e41}
+
+.button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.setprefixtext {
+  padding: 6px 1px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: black;
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+}
+</style>
+<input class="setprefixtext" name="prefix" id="prefix">&nbsp;&nbsp;<input class="button" type="Submit"></form>
+<%- done ? '<font color="green">Done!</font>' : '' %><br><br>
